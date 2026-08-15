@@ -11,12 +11,8 @@ public class Main {
         int n2 = scanner.nextInt();
 
         int divisao = n1 /n2;
-
-
-
         } catch (ArithmeticException e){
             System.out.println("Erro! Divisão por zero");
-
         } catch (InputMismatchException e){
             System.out.println("Erro! Tipo invalido");
         } finally {
