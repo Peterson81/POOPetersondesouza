@@ -1,0 +1,63 @@
+package dominio;
+import java.util.ArrayList;
+public class NotaFiscal {
+   private int numero;
+   private String data;
+   // Atributo de relacionamento N-ário (Itens da Nota)
+   private ArrayList<Item> listaItens;
+   public NotaFiscal(int numero, String data) {
+       this.numero = numero;
+       this.data = data;
+       this.listaItens = new ArrayList<>();
+   }
+   public int getNumero() {
+       return numero;
+   }
+   public void setNumero(int numero) {
+       this.numero = numero;
+   }
+   public String getData() {
+       return data;
+   }
+   public void setData(String data) {
+       this.data = data;
+   }
+   public ArrayList<Item> getListaItens() {
+       return listaItens;
+   }
+   public void addItem(Item item) {
+       if (item != null && !this.listaItens.contains(item)) {
+           this.listaItens.add(item);
+       }
+   }
+   public void removeItem(Item item) {
+       if (item != null && this.listaItens.contains(item)) {
+           this.listaItens.remove(item);
+       }
+   }
+   // Calcula o valor total iterando sobre a lista de itens
+   public double calcularTotalNota() {
+       double total = 0.0;
+       for (Item item : listaItens) {
+           total += item.calcularSubtotal();
+       }
+       return total;
+   }
+   public void imprimirNotaFiscal() {
+       System.out.println("\n=========================================================");
+       System.out.println("                   NOTA FISCAL Nº " + this.numero);
+       System.out.println("Data: " + this.data);
+       System.out.println("---------------------------------------------------------");
+       if (listaItens.isEmpty()) {
+           System.out.println("Nenhum item associado a esta nota fiscal.");
+       } else {
+           for (Item item : listaItens) {
+               System.out.println(item);
+           }
+           System.out.println("---------------------------------------------------------");
+           System.out.printf("VALOR TOTAL DA NOTA: R$ %.2f\n", calcularTotalNota());
+       }
+       System.out.println("=========================================================");
+   }
+}
+
