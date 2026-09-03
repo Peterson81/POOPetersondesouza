@@ -1,0 +1,63 @@
+package dominio;
+public class Produto {
+   private String codigo;
+   private String nome;
+   private double preco;
+   // Atributo de relacionamento Unário
+   private Fabricante fabricante;
+   public Produto(String codigo, String nome, double preco) {
+       this.codigo = codigo;
+       this.nome = nome;
+       this.preco = preco;
+       this.fabricante = null;
+   }
+   public String getCodigo() {
+       return codigo;
+   }
+   public void setCodigo(String codigo) {
+       this.codigo = codigo;
+   }
+   public String getNome() {
+       return nome;
+   }
+   public void setNome(String nome) {
+       this.nome = nome;
+   }
+   public double getPreco() {
+       return preco;
+   }
+   public void setPreco(double preco) {
+       this.preco = preco;
+   }
+   public Fabricante getFabricante() {
+       return fabricante;
+   }
+   // Método set com consistência bidirecional
+   public void setFabricante(Fabricante novoFab) {
+       // Se a referência é a mesma, não há necessidade de atualização
+       if (this.fabricante == novoFab) return;
+       // Se o parâmetro é null, remove o vínculo anterior
+       if (novoFab == null) {
+           Fabricante antigo = this.fabricante;
+           this.fabricante = null;
+           if (antigo != null) {
+               antigo.removeProduto(this);
+           }
+       } else {
+           // Se já pertencia a outro fabricante, solicita a desvinculação
+           if (this.fabricante != null) {
+               this.fabricante.removeProduto(this);
+           }
+           // Estabelece a referência local
+           this.fabricante = novoFab;
+           // Solicita a adição da referência no fabricante de destino
+           novoFab.addProduto(this);
+       }
+   }
+   @Override
+   public String toString() {
+       String nomeFab = (fabricante != null) ? fabricante.getNome() : "Sem Fabricante";
+       return String.format("Código: %-5s | Nome: %-15s | Preço: R$ %-7.2f | Fabricante: %s",
+                            codigo, nome, preco, nomeFab);
+   }
+}
