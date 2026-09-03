@@ -1,0 +1,62 @@
+package dominio;
+import java.util.ArrayList;
+public class Fabricante {
+   private String cnpj;
+   private String nome;
+  
+   // Atributo de relacionamento N-ário
+   private ArrayList<Produto> listaProdutos;
+   public Fabricante(String cnpj, String nome) {
+       this.cnpj = cnpj;
+       this.nome = nome;
+       this.listaProdutos = new ArrayList<>();
+   }
+   public String getCnpj() {
+       return cnpj;
+   }
+   public void setCnpj(String cnpj) {
+       this.cnpj = cnpj;
+   }
+   public String getNome() {
+       return nome;
+   }
+   public void setNome(String nome) {
+       this.nome = nome;
+   }
+   public ArrayList<Produto> getListaProdutos() {
+       return listaProdutos;
+   }
+   // Método add com consistência bidirecional
+   public void addProduto(Produto novo) {
+       if (novo == null) return;
+       // Se já contém, encerra para evitar duplicações e loop
+       if (this.listaProdutos.contains(novo)) return;
+       // Adiciona à coleção interna
+       this.listaProdutos.add(novo);
+       // Atualiza a outra extremidade do relacionamento
+       novo.setFabricante(this);
+   }
+   // Método remove com consistência bidirecional
+   public void removeProduto(Produto antigo) {
+       if (antigo == null) return;
+       // Se não contém, encerra
+       if (!this.listaProdutos.contains(antigo)) return;
+       // Remove da coleção interna
+       this.listaProdutos.remove(antigo);
+       // Desvincula a outra extremidade do relacionamento
+       antigo.setFabricante(null);
+   }
+   public void listarProdutos() {
+       System.out.println("\n--- Produtos do Fabricante: " + this.nome + " (CNPJ: " + this.cnpj + ") ---");
+       if (this.listaProdutos.isEmpty()) {
+           System.out.println("Nenhum produto vinculado a este fabricante.");
+       } else {
+           for (Produto p : this.listaProdutos) {
+               System.out.println(p);
+           }
+           System.out.println("Total de itens vinculados: " + this.listaProdutos.size());
+       }
+   }
+
+}
+
