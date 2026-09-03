@@ -1,0 +1,116 @@
+package controle;
+import dominio.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+public class ControlaVenda {
+   public static Produto buscarProdutoPorCodigo(ArrayList<Produto> lista, String codigo) {
+       for (Produto p : lista) {
+           if (p.getCodigo().equalsIgnoreCase(codigo.trim())) {
+               return p;
+           }
+       }
+       return null;
+   }
+   public static NotaFiscal buscarNotaPorNumero(ArrayList<NotaFiscal> lista, int numero) {
+       for (NotaFiscal nf : lista) {
+           if (nf.getNumero() == numero) {
+               return nf;
+           }
+       }
+       return null;
+   }
+   public static void main(String[] args) {
+       Scanner scanner = new Scanner(System.in);
+       ArrayList<Produto> catalogoProdutos = new ArrayList<>();
+       ArrayList<NotaFiscal> listaNotas = new ArrayList<>();
+       // Produtos pré-cadastrados
+       catalogoProdutos.add(new Produto("P01", "Monitor 24pol", 850.00));
+       catalogoProdutos.add(new Produto("P02", "Teclado Sem Fio", 120.00));
+       catalogoProdutos.add(new Produto("P03", "Mouse Pad Extra", 45.00));
+       catalogoProdutos.add(new Produto("P04", "Cabo HDMI 2.0", 25.00));
+       int opcao = 0;
+       do {
+           System.out.println("\n========================================");
+           System.out.println("   SISTEMA DE VENDAS (CLASSES DE ASSOCIAÇÃO)");
+           System.out.println("========================================");
+           System.out.println("1 - Criar Nova Nota Fiscal");
+           System.out.println("2 - Adicionar Item (Produto) a uma Nota Fiscal");
+           System.out.println("3 - Imprimir Nota Fiscal e Total");
+           System.out.println("4 - Consultar Catálogo de Produtos");
+           System.out.println("0 - Sair");
+           System.out.print("Escolha uma opção: ");
+           if (scanner.hasNextInt()) {
+               opcao = scanner.nextInt();
+               scanner.nextLine();
+           } else {
+               System.out.println("Entrada inválida!");
+               scanner.nextLine();
+               continue;
+           }
+           switch (opcao) {
+               case 1:
+                   System.out.print("\nInforme o número da Nota Fiscal: ");
+                   int numNF = scanner.nextInt();
+                   scanner.nextLine();
+                   if (buscarNotaPorNumero(listaNotas, numNF) != null) {
+                       System.out.println(">> Erro: Número de Nota Fiscal já existente.");
+                       break;
+                   }
+                   System.out.print("Informe a data (ex: 26/08/2026): ");
+                   String data = scanner.nextLine().trim();
+                   listaNotas.add(new NotaFiscal(numNF, data));
+                   System.out.println(">> Nota Fiscal Nº " + numNF + " aberta com sucesso!");
+                   break;
+               case 2:
+                   System.out.print("\nInforme o número da Nota Fiscal: ");
+                   int numBusca = scanner.nextInt();
+                   scanner.nextLine();
+                   NotaFiscal nfAlvo = buscarNotaPorNumero(listaNotas, numBusca);
+                   if (nfAlvo == null) {
+                       System.out.println(">> Nota Fiscal não encontrada.");
+                       break;
+                   }
+                   System.out.print("Informe o código do produto a ser vendido: ");
+                   String codProd = scanner.nextLine().trim();
+                   Produto prodAlvo = buscarProdutoPorCodigo(catalogoProdutos, codProd);
+                   if (prodAlvo == null) {
+                       System.out.println(">> Produto não localizado no catálogo.");
+                       break;
+                   }
+                   System.out.print("Quantidade: ");
+                   int qtd = scanner.nextInt();
+                   System.out.print("Preço de Venda Unitário (Base sugerido: R$ " + prodAlvo.getPrecoBase() + "): R$ ");
+                   double precoVenda = scanner.nextDouble();
+                   scanner.nextLine();
+                   // A criação do Item estabelece a ligação entre NotaFiscal e Produto
+                   Item novoItem = new Item(nfAlvo, prodAlvo, qtd, precoVenda);
+                   System.out.println(">> Item associado com sucesso à Nota Fiscal!");
+                   break;
+               case 3:
+                   System.out.print("\nInforme o número da Nota Fiscal para impressão: ");
+                   int numConsulta = scanner.nextInt();
+                   scanner.nextLine();
+                   NotaFiscal nfConsulta = buscarNotaPorNumero(listaNotas, numConsulta);
+                   if (nfConsulta != null) {
+                       nfConsulta.imprimirNotaFiscal();
+                   } else {
+                       System.out.println(">> Nota Fiscal não encontrada.");
+                   }
+                   break;
+               case 4:
+                   System.out.println("\n=== Catálogo de Produtos ===");
+                   for (Produto p : catalogoProdutos) {
+                       System.out.println(p);
+                   }
+                   break;
+               case 0:
+                   System.out.println("\nFinalizando o sistema...");
+                   break;
+               default:
+                   System.out.println("\nOpção inválida!");
+                   break;
+           }
+       } while (opcao != 0);
+       scanner.close();
+   }
+}
