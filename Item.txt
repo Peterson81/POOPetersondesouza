@@ -1,0 +1,52 @@
+
+package dominio;
+public class Item {
+   // Atributos próprios do relacionamento
+   private int quantidade;
+   private double precoVendaUnitario;
+   // Atributos de relacionamento Unários
+   private NotaFiscal notaFiscal;
+   private Produto produto;
+   public Item(NotaFiscal notaFiscal, Produto produto, int quantidade, double precoVendaUnitario) {
+       this.notaFiscal = notaFiscal;
+       this.produto = produto;
+       this.quantidade = quantidade;
+       this.precoVendaUnitario = precoVendaUnitario;
+       // Ao instanciar o item, vincula-se às coleções de ambas as extremidades
+       if (this.notaFiscal != null) {
+           this.notaFiscal.addItem(this);
+       }
+       if (this.produto != null) {
+           this.produto.addItem(this);
+       }
+   }
+   public int getQuantidade() {
+       return quantidade;
+   }
+   public void setQuantidade(int quantidade) {
+       this.quantidade = quantidade;
+   }
+   public double getPrecoVendaUnitario() {
+       return precoVendaUnitario;
+   }
+   public void setPrecoVendaUnitario(double precoVendaUnitario) {
+       this.precoVendaUnitario = precoVendaUnitario;
+   }
+   public NotaFiscal getNotaFiscal() {
+       return notaFiscal;
+   }
+   public Produto getProduto() {
+       return produto;
+   }
+   // Calcula o subtotal do item
+   public double calcularSubtotal() {
+       return this.quantidade * this.precoVendaUnitario;
+   }
+   @Override
+   public String toString() {
+       String nomeProd = (produto != null) ? produto.getNome() : "Desconhecido";
+       return String.format("Produto: %-15s | Qtd: %-3d | Preço Unit: R$ %-7.2f | Subtotal: R$ %.2f",
+               nomeProd, quantidade, precoVendaUnitario, calcularSubtotal());
+   }
+}
+

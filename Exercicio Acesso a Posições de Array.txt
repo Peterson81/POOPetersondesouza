@@ -1,0 +1,17 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        String [] cidade = {"SE", "BA","MG","SP", "RJ"};
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Digite um numero para escolher a cidade");
+            int n = scanner.nextInt();
+            System.out.println("Cidade escolhida: " + cidade[n]);
+
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("Numero digitado errado!");
+        }
+    }
+}
