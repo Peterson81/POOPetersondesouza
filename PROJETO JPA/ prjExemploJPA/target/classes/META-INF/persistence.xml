@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+
+	<persistence-unit name="PuMvcJpa" transaction-type="RESOURCE_LOCAL">
+		<!-- Provedor JPA adotado -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+		<properties>
+			<!-- Parâmetros de Conexão JDBC -->
+			<property name="javax.persistence.jdbc.driver"
+				value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:postgresql://localhost:5432/exemplo_jpa" />
+			<property name="javax.persistence.jdbc.user" value="postgres" />
+			<property name="javax.persistence.jdbc.password" value="postgres" />
+
+			<!-- Dialeto do Banco de Dados para geração adequada de SQL -->
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.PostgreSQLDialect" />
+
+			<!-- Visualização e Formatação do SQL no Console -->
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+
+			<!-- Atualização automática do schema (cria tabelas e colunas
+			dinamicamente) -->
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+		</properties>
+	</persistence-unit>
+</persistence>
